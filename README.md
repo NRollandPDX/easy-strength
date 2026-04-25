@@ -5,6 +5,8 @@ Pick a routine, swap exercises and adjust loads on the fly, tap to check
 off sets as you go, and review your history. Installs to your phone home
 screen as a PWA — works offline, no account, no cloud.
 
+**Live app:** https://nrollandpdx.github.io/easy-strength/
+
 🏠 **Today** — start a session or run the active one
 📜 **History** — every completed session, sorted newest first
 🖨 **Print** — paper-friendly sheet of any session (active or past)
@@ -13,16 +15,20 @@ screen as a PWA — works offline, no account, no cloud.
 
 ## Install on iPhone
 
-1. Open the deployed URL in **Safari** on your iPhone.
-2. Tap the **Share** button (square with up-arrow).
-3. Scroll down and tap **Add to Home Screen**.
-4. Tap **Add** in the top right.
-5. The Easy Strength icon appears on your home screen. Tap to launch in
-   full-screen mode (no browser chrome). Works offline once cached.
+1. In **Safari** on your iPhone, open https://nrollandpdx.github.io/easy-strength/
+2. Tap the **Share** button (square with up-arrow at the bottom of Safari).
+3. Scroll down in the share sheet and tap **Add to Home Screen**.
+4. Confirm the name "Easy Strength" and tap **Add** in the top right.
+5. The app icon appears on your home screen. Tap to launch in full-screen
+   mode (no browser chrome). Works offline once cached — first launch needs
+   network, after that the gym basement is fine.
+
+**Note:** "Add to Home Screen" only appears in Safari, not Chrome on iOS.
+Other browsers proxy to Safari's WebKit but don't expose the install option.
 
 ## Install on Android (Chrome)
 
-1. Open the deployed URL in Chrome.
+1. In Chrome, open https://nrollandpdx.github.io/easy-strength/
 2. Tap the menu (⋮) → **Add to Home screen** → **Install**.
 3. Same offline-capable PWA experience.
 
