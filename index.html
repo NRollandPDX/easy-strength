@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>Easy Strength</title>
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0D0F12" />
+
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Easy Strength" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app">
+
+  <!-- Top header (constant) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span class="brand-text">Easy Strength</span>
+      </div>
+      <div class="topbar-right" id="topbarRight"></div>
+    </div>
+  </header>
+
+  <!-- ===================== TODAY VIEW ===================== -->
+  <section class="view" id="view-today">
+
+    <!-- Empty state: no active session -->
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-card">
+        <h2>Start a session</h2>
+        <p class="muted">Pick a routine. Defaults are pre-loaded; tap any exercise during the workout to swap or adjust.</p>
+        <div class="routine-picker" id="routinePicker"></div>
+        <div class="meta-row">
+          <label>Date</label>
+          <input type="date" id="newSessionDate" />
+        </div>
+        <div class="meta-row">
+          <label>Location <span class="muted-inline">(optional)</span></label>
+          <input type="text" id="newSessionLocation" placeholder="West Linn" />
+        </div>
+        <button class="btn btn-primary btn-block" id="startBtn" disabled>Start Workout</button>
+      </div>
+    </div>
+
+    <!-- Active session: run view -->
+    <div id="runState" class="run-state hidden">
+      <div class="run-header">
+        <div class="run-routine">
+          <span class="run-name" id="runName"></span>
+          <span class="run-focus" id="runFocus"></span>
+        </div>
+        <div class="run-meta" id="runMeta"></div>
+      </div>
+
+      <details class="warmup-details" id="warmupDetails">
+        <summary>
+          <span class="section-label-inline">Warm Up</span>
+          <span class="warmup-summary" id="warmupSummary"></span>
+        </summary>
+        <ul class="warmup-list" id="warmupList"></ul>
+      </details>
+
+      <div class="section-label">Main Block</div>
+      <div class="exercise-list" id="exerciseList"></div>
+
+      <div class="run-actions">
+        <button class="btn btn-secondary" id="cancelBtn">Discard</button>
+        <button class="btn btn-primary" id="finishBtn">Finish Workout</button>
+      </div>
+      <div class="completion-meter">
+        <div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div>
+        <div class="meter-label" id="meterLabel">0 of 0 sets complete</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HISTORY VIEW ===================== -->
+  <section class="view hidden" id="view-history">
+    <div class="view-header">
+      <h1>History</h1>
+      <p class="muted" id="historyCount"></p>
+    </div>
+    <div id="historyList" class="history-list"></div>
+    <div id="historyEmpty" class="empty-card hidden">
+      <h2>No sessions yet</h2>
+      <p class="muted">Finished workouts will appear here.</p>
+    </div>
+  </section>
+
+  <!-- ===================== HISTORY DETAIL VIEW ===================== -->
+  <section class="view hidden" id="view-history-detail">
+    <button class="btn-back" id="historyBackBtn">← Back</button>
+    <div id="historyDetail"></div>
+  </section>
+
+  <!-- ===================== PRINT VIEW ===================== -->
+  <section class="view hidden" id="view-print">
+    <div class="view-header">
+      <h1>Printable Sheet</h1>
+      <p class="muted">Generate a paper-friendly sheet for the active or a saved session.</p>
+    </div>
+    <div class="print-options">
+      <label>Source</label>
+      <select id="printSource"></select>
+      <button class="btn btn-primary" id="printBtn">Print / Save as PDF</button>
+    </div>
+    <div class="print-preview" id="printPreview"></div>
+  </section>
+
+  <!-- ===================== BOTTOM NAV ===================== -->
+  <nav class="bottom-nav">
+    <button data-view="today"   class="nav-btn active"><span>Today</span></button>
+    <button data-view="history" class="nav-btn"><span>History</span></button>
+    <button data-view="print"   class="nav-btn"><span>Print</span></button>
+  </nav>
+</div>
+
+<!-- ===================== EXERCISE EDIT SHEET (modal) ===================== -->
+<div class="modal hidden" id="exerciseEditModal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <span class="section-label-inline">Edit Exercise</span>
+      <button class="modal-close" data-close>×</button>
+    </div>
+    <div class="modal-body">
+      <label>Exercise</label>
+      <select id="editExercise"></select>
+      <label>Variant</label>
+      <select id="editVariant"></select>
+      <div class="modal-row-2">
+        <div>
+          <label>Reps</label>
+          <input type="text" id="editReps" />
+        </div>
+        <div>
+          <label>Sets</label>
+          <input type="number" id="editSets" min="1" max="10" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Cancel</button>
+      <button class="btn btn-primary" id="editSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONFIRM MODAL ===================== -->
+<div class="modal hidden" id="confirmModal" aria-hidden="true">
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-sheet small">
+    <div class="modal-header">
+      <span class="section-label-inline" id="confirmTitle">Confirm</span>
+    </div>
+    <div class="modal-body">
+      <p id="confirmBody"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" data-close>Cancel</button>
+      <button class="btn btn-danger" id="confirmOkBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js" defer></script>
+</body>
+</html>

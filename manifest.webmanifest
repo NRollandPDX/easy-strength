@@ -1,0 +1,12 @@
+{
+  "name": "Easy Strength",
+  "short_name": "EasyStrength",
+  "description": "Two-routine Easy Strength tracker with offline workout logging.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D0F12",
+  "theme_color": "#0D0F12",
+  "categories": ["fitness", "health", "productivity"]
+}
