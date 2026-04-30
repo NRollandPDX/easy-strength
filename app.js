@@ -326,7 +326,7 @@ const timerEngine = (() => {
     elapsed = 0;
     lastRoundFired = -1;
     audio.tick();
-    renderRunView();
+    renderEmomRunView();
     intervalId = setInterval(() => tick(session), 1000);
   }
 
@@ -342,7 +342,7 @@ const timerEngine = (() => {
         lastRoundFired = 0;
         elapsed = 0;
       }
-      renderRunView();
+      renderEmomRunView();
       return;
     }
     if (phase === "running") {
@@ -360,7 +360,7 @@ const timerEngine = (() => {
         audio.finish();
         clear();
       }
-      renderRunView();
+      renderEmomRunView();
       return;
     }
   }
