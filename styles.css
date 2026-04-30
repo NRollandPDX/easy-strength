@@ -110,7 +110,7 @@ body {
 
 /* ============== Empty state / cards ============== */
 .empty-state {
-  display: flex; align-items: flex-start; justify-content: center;
+  display: flex; flex-direction: column; align-items: center;
   padding-top: 8px;
 }
 .empty-card {
@@ -126,6 +126,16 @@ body {
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 .empty-card p { margin: 0 0 16px; }
+.card-section-header {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  border-bottom: 1px solid var(--indigo);
+  padding-bottom: 6px;
+  margin: 0 0 12px;
+}
 
 /* ============== Routine picker ============== */
 .routine-picker {
@@ -387,6 +397,199 @@ input:focus, select:focus {
 .ex-input-row input {
   font-size: 16px;
   padding: 10px 10px;
+}
+
+/* ============== Chip rows (KB pickers) ============== */
+.chip-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.duration-chip,
+.weight-chip {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 16px;
+  border: 2px solid var(--haze);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--midnight);
+  cursor: pointer;
+  min-height: 44px;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+}
+.duration-chip:hover,
+.weight-chip:hover { border-color: var(--indigo); }
+.duration-chip.selected,
+.weight-chip.selected {
+  background: var(--indigo);
+  color: var(--white);
+  border-color: var(--indigo);
+}
+
+/* Smaller weight chips for round rows */
+.weight-chip-sm {
+  font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 0;
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid var(--haze);
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--slate);
+  cursor: pointer;
+  min-height: 36px;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+}
+.weight-chip-sm:hover { border-color: var(--indigo); }
+.weight-chip-sm.selected {
+  background: var(--indigo);
+  color: var(--white);
+  border-color: var(--indigo);
+}
+
+/* ============== EMOM run view ============== */
+.emom-header {
+  background: var(--white);
+  border: 1px solid var(--haze);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.emom-title {
+  font-weight: 800;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.emom-meta {
+  font-size: 11px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.emom-timer-wrap {
+  position: relative;
+  background: var(--deep);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 30px 16px 22px;
+  text-align: center;
+  margin-bottom: 12px;
+  border: 2px solid var(--indigo);
+  overflow: hidden;
+}
+.emom-big-timer {
+  font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 72px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--white);
+}
+.emom-big-timer.done {
+  color: var(--success);
+  font-size: 56px;
+}
+.emom-round-badge {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--indigo);
+}
+
+/* Pre-start countdown overlay */
+.pre-countdown {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 15, 18, 0.92);
+  font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-size: 120px;
+  font-weight: 800;
+  color: var(--indigo);
+  z-index: 5;
+  animation: pulse 1s ease-in-out;
+}
+@keyframes pulse {
+  0%   { transform: scale(0.85); opacity: 0.6; }
+  50%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+.emom-timer-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.emom-timer-actions .btn { flex: 1; }
+
+/* Round list */
+.round-list {
+  display: grid;
+  gap: 8px;
+}
+.round-row {
+  background: var(--white);
+  border: 1px solid var(--haze);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.round-row.current {
+  border-color: var(--indigo);
+  background: var(--indigo-bg);
+  border-width: 2px;
+  padding: 9px 11px;
+}
+.round-row.done {
+  background: #F0FDF4;
+  border-color: var(--success);
+}
+.round-check {
+  width: 44px; height: 44px;
+  border: 2px solid var(--midnight);
+  border-radius: 8px;
+  background: var(--white);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--slate);
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.round-check.done {
+  background: var(--success);
+  color: var(--white);
+  border-color: var(--success);
+}
+.round-check:active { transform: scale(0.95); }
+.round-main {
+  display: flex; flex-direction: column; gap: 6px;
+  min-width: 0;
+}
+.round-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--slate);
+}
+.round-row.current .round-label { color: var(--indigo); }
+.round-weight-chips {
+  display: flex; gap: 4px;
 }
 
 /* ============== Run actions ============== */

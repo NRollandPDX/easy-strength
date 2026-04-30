@@ -36,10 +36,13 @@
 
     <!-- Empty state: no active session -->
     <div id="emptyState" class="empty-state hidden">
+
+      <!-- Strength routines -->
       <div class="empty-card">
-        <h2>Start a session</h2>
+        <div class="card-section-header">Strength</div>
         <p class="muted">Pick a routine. Defaults are pre-loaded; tap any exercise during the workout to swap or adjust.</p>
-        <div class="routine-picker" id="routinePicker"></div>
+        <div class="routine-picker" id="strengthPicker"></div>
+
         <div class="meta-row">
           <label>Date</label>
           <input type="date" id="newSessionDate" />
@@ -48,7 +51,30 @@
           <label>Location <span class="muted-inline">(optional)</span></label>
           <input type="text" id="newSessionLocation" placeholder="West Linn" />
         </div>
-        <button class="btn btn-primary btn-block" id="startBtn" disabled>Start Workout</button>
+        <button class="btn btn-primary btn-block" id="startStrengthBtn" disabled>Start Strength Workout</button>
+      </div>
+
+      <!-- KB EMOM -->
+      <div class="empty-card" style="margin-top:14px;">
+        <div class="card-section-header">Kettlebell EMOM</div>
+        <p class="muted">Every minute on the minute. Chime at the start of each round, second chime at finish. Tap weight chips during or after.</p>
+
+        <div class="meta-row">
+          <label>Duration</label>
+          <div class="chip-row" id="kbDurationPicker"></div>
+        </div>
+
+        <div class="meta-row">
+          <label>Exercise</label>
+          <select id="kbExerciseSelect"></select>
+        </div>
+
+        <div class="meta-row">
+          <label>Default Weight <span class="muted-inline">(optional — pre-fills every round)</span></label>
+          <div class="chip-row" id="kbDefaultWeight"></div>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="startKbBtn">Start Kettlebell Timer</button>
       </div>
     </div>
 
@@ -80,6 +106,35 @@
       <div class="completion-meter">
         <div class="meter-bar"><div class="meter-fill" id="meterFill"></div></div>
         <div class="meter-label" id="meterLabel">0 of 0 sets complete</div>
+      </div>
+    </div>
+
+    <!-- EMOM run state -->
+    <div id="runEmomState" class="run-state hidden">
+      <div class="emom-header">
+        <div class="emom-title-block">
+          <div class="emom-title" id="emomTitle">Exercise</div>
+          <div class="emom-meta" id="emomMeta"></div>
+        </div>
+      </div>
+
+      <div class="emom-timer-wrap">
+        <div class="emom-big-timer" id="emomBigTimer">00:00</div>
+        <div class="emom-round-badge" id="emomRoundBadge"></div>
+        <div class="pre-countdown hidden" id="preCountdown"></div>
+      </div>
+
+      <div class="emom-timer-actions">
+        <button class="btn btn-primary" id="emomStartTimerBtn">Start Timer</button>
+        <button class="btn btn-secondary hidden" id="emomStopTimerBtn">Pause Timer</button>
+      </div>
+
+      <div class="section-label">Rounds</div>
+      <div class="round-list" id="emomRoundList"></div>
+
+      <div class="run-actions">
+        <button class="btn btn-secondary" id="emomCancelBtn">Discard</button>
+        <button class="btn btn-primary" id="emomFinishBtn">Finish Workout</button>
       </div>
     </div>
   </section>

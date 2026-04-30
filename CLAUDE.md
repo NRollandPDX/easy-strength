@@ -1,8 +1,13 @@
 # Easy Strength v2 — Project Notes for Claude
 
-This is a static, single-page PWA workout tracker for Pavel Tsatsouline's
-Easy Strength program. It's deployed to GitHub Pages and installed to the
-user's iPhone home screen. Read this file before making changes.
+This is a static, single-page PWA workout tracker. It's deployed to GitHub
+Pages and installed to the user's iPhone home screen. Read this file before
+making changes.
+
+**Two session types:**
+- `strength` — original Easy Strength two-routine model (Force / Finesse)
+- `emom`     — Kettlebell EMOM timer with synthesized chimes and per-round
+  weight chips
 
 ## File layout
 
@@ -87,9 +92,11 @@ force: {
 
 ### `activeSession` schema (in localStorage)
 
+**Strength session:**
 ```js
 {
   id: "s_1745601...",                    // unique
+  type: "strength",                      // discriminator (added in v2.1)
   routineId: "force",
   date: "2026-04-25",
   location: "West Linn",
@@ -111,6 +118,64 @@ force: {
 }
 ```
 
+**EMOM session:**
+```js
+{
+  id: "s_1745601...",
+  type: "emom",
+  date: "2026-04-30",
+  location: "Garage",
+  exercise: "Two-Hand Swing",            // single string from KB_LIBRARY
+  durationMinutes: 10,                   // one of KB_DURATIONS
+  defaultWeight: "16",                   // optional, applied to every round at start
+  rounds: [
+    { idx: 0, done: true,  weight: "16", completedAt: "2026-04-30T16:33Z" },
+    { idx: 1, done: false, weight: null, completedAt: null },
+    ...
+  ],
+  startedAt, completedAt,
+}
+```
+
+**Migration:** `migrateSession()` adds `type: "strength"` to legacy sessions
+that predate v2.1.
+
+### Kettlebell EMOM constants (in `app.js`)
+
+```js
+KB_LIBRARY     // string[] of exercise names
+KB_WEIGHTS     // ["12","16","20","24","28","32"] kg, used by chip selectors
+KB_DURATIONS   // [10, 15, 20] minutes
+PRE_START_SECONDS  // 5 (pre-workout countdown)
+```
+
+### Audio + Wake Lock
+
+- `audio.unlock()` — must be called inside a user gesture (the Start button
+  click). Primes the iOS audio path. Without this, iOS Safari blocks all
+  subsequent chimes from the timer interval.
+- `audio.tick()`, `audio.chime()`, `audio.finish()` — synthesized via Web
+  Audio API oscillators. No audio files in the repo.
+- `wakeLock` — uses Screen Wake Lock API to keep the display on during a
+  workout. Falls back gracefully on browsers without support. Re-acquires
+  on `visibilitychange` so flipping back from a notification works.
+
+### Timer engine (`timerEngine`)
+
+- In-memory only (not persisted). Uses `setInterval` at 1s.
+- Phases: `idle` → `preStart` (5s) → `running` → `finished`.
+- Mutates `state.active.rounds[i].done/.completedAt` only when the user taps
+  a round — the timer itself doesn't auto-complete rounds.
+- If the app is closed mid-timer, on reopen the session is still in
+  `localStorage` but the timer is gone. User can either tap "Resume Timer"
+  to restart from the current elapsed time (which restarts the countdown
+  from full duration — caveat below) or just check off completed rounds
+  manually and finish.
+- **Limitation:** "Resume Timer" today restarts the engine from elapsed=0.
+  True resume-from-timestamp would require persisting `elapsed` and
+  computing offset from a saved `runningSince` timestamp. Currently a known
+  limitation; flag if the user wants it fixed.
+
 ## Common edits
 
 | User asks for... | What to change |
@@ -122,6 +187,11 @@ force: {
 | "Change default reps for X" | Find the slot in `ROUTINES` and update its `reps` / `sets`. |
 | "Change brand color" | Edit `--indigo` in `styles.css`. |
 | "Add a finisher / extra credit section" | Currently no special section — recommend adding it as a slot with `category: "finisher"` and treating it visually like the rest. Discuss with user before restructuring. |
+| "Add a kettlebell exercise" | Push to `KB_LIBRARY` array in `app.js`. Renders in the EMOM exercise dropdown automatically. |
+| "Add a heavier kettlebell weight" | Push to `KB_WEIGHTS` array. Renders in chip pickers automatically. |
+| "Allow other workout durations" | Edit `KB_DURATIONS`. |
+| "Change the chime sound" | Edit `audio.chime()` / `audio.finish()` in `app.js` — adjust `freq`, `duration`, `volume`, or add additional `tone()` calls for a chord. Synthesized only — no audio files. |
+| "Change the pre-start countdown length" | Edit `PRE_START_SECONDS` constant (defaults to 5). |
 
 ## Deployment
 

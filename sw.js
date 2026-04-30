@@ -2,7 +2,7 @@
    Cache-first for the app shell so the app loads instantly and works offline.
    Bump CACHE_VERSION on any deploy to force clients to fetch new assets.
 */
-const CACHE_VERSION = "es-v1";
+const CACHE_VERSION = "es-v2";
 const APP_SHELL = [
   "./",
   "./index.html",

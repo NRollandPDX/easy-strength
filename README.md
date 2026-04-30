@@ -34,7 +34,9 @@ Other browsers proxy to Safari's WebKit but don't expose the install option.
 
 ---
 
-## Routines
+## Workout types
+
+### Strength — two alternating routines
 
 **Workout One — Force**
 - Warm-up: Farmer's Carries · Face Pulls · Rotator Cuff
@@ -45,6 +47,20 @@ Other browsers proxy to Safari's WebKit but don't expose the install option.
 - Chest Flies · Lat Raise · Single-Leg Deadlift · Reverse Lunge · Pull Ups · Biceps
 
 Defaults: **7 reps × 3 sets** for all main lifts. **20–30 sec × 3 sets** for Hangs.
+
+### Kettlebell EMOM — every minute on the minute
+
+- Pick a duration (10 / 15 / 20 minutes), an exercise, and an optional default weight.
+- 5-second pre-start countdown (with audible ticks) before the workout begins.
+- A bell chime fires at the start of every minute (including round 1) and a finishing
+  three-note chime when the workout ends.
+- Tap any round's checkbox during or after the work.
+- Tap a weight chip (12 / 16 / 20 / 24 / 28 / 32 KG) on any round to log the load —
+  during the round or anytime after.
+- The screen stays awake during the timer (Wake Lock API on supported devices).
+- **Heads up:** iOS pauses audio when Safari/the PWA is backgrounded or the screen is
+  locked. Keep the app in the foreground for chimes to fire reliably. Wake Lock keeps
+  the screen on as long as the app is visible.
 
 ## During a workout
 
